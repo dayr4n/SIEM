@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# Virtual Environment
+.venv/
+venv/
+
+# Environment
+.env
+
+# VSCode
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# Pytest
+.pytest_cache/
+
+# Mypy
+.mypy_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Obsidian
+.obsidian/workspace.json
