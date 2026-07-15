@@ -1,4 +1,5 @@
 import psutil
+import json 
 
 def get_cpu_usage():
     return psutil.cpu_percent(interval=1)
@@ -55,4 +56,6 @@ def get_cpu_info():
         'times': get_cpu_times(),
         "usage_per_core": get_cpu_usage_per_core()
     }
-    
+#important cpu but in json format
+def get_cpu_info_json():
+    return json.dumps(get_cpu_info(), indent=4)

@@ -1,4 +1,4 @@
-from cpu import get_cpu_info
+from cpu import get_cpu_info_json
 
-print(get_cpu_info())
+print(get_cpu_info_json())
 
