@@ -1,0 +1,18 @@
+import platform
+import socket
+
+
+def get_summary_os():
+    return {
+        "HOSTNAME": socket.gethostname(),
+        "OS": platform.system(),
+        "DISTRIBUTION": platform.release(),
+        "VERSION": platform.version(),
+        "ARCHITECTURE": platform.machine(),
+        "PROCESSOR": platform.processor(),
+    }
+
+
+resutl = get_summary_os()
+
+print(resutl)
