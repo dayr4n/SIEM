@@ -54,7 +54,3 @@ def get_summary_processes():
         "processes": get_inventory_processes(),
         "file_processes": get_file_processes(),
     }
-
-
-result = get_summary_processes()
-print(result)

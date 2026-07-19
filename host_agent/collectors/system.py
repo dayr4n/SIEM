@@ -2,7 +2,7 @@ import platform
 import socket
 
 
-def get_summary_os():
+def get_summary_system():
     return {
         "HOSTNAME": socket.gethostname(),
         "OS": platform.system(),

@@ -2,7 +2,7 @@ import psutil
 from datetime import datetime
 
 
-def get_logged_users():
+def get_summary_users():
     users = []
 
     for user in psutil.users():
