@@ -11,8 +11,3 @@ def get_summary_os():
         "ARCHITECTURE": platform.machine(),
         "PROCESSOR": platform.processor(),
     }
-
-
-resutl = get_summary_os()
-
-print(resutl)
