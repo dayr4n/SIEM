@@ -54,7 +54,6 @@ def get_cpu_times():
 def get_summary_cpu():
     return {
         "usage": get_cpu_usage(),
-        "cores": get_cpu_cores(),
         "frequency": get_cpu_frequency(),
         "load_average": get_load_average(),
         "stats": get_cpu_stats(),

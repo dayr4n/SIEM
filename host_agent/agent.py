@@ -1,0 +1,76 @@
+from .config import (
+    HOST_AGENT_NAME,
+    HOST_AGENT_VERSION,
+    COLLECTION_DYNAMIC_INTERVAL,
+    COLLECTION_STATIC_INTERVAL,
+    DEBUG,
+    LOG_LEVEL,
+)
+from .collectors import *
+import time
+import threading
+
+
+class HostAgent:
+    def __init__(self) -> None:
+        self.version = HOST_AGENT_VERSION
+        self.name = HOST_AGENT_NAME
+        self.dynamic_collection_interval = COLLECTION_DYNAMIC_INTERVAL
+        self.static_collection_interval = COLLECTION_STATIC_INTERVAL
+        self.debug = DEBUG
+        self.dynamic_data = {}
+        self.static_data = {}
+        self.log_level = LOG_LEVEL
+
+    # STATIC AND DYNAMIC COLLECT \ HERE WE CAN SEE THE STATIC AND DYNAMIC COLLECT OF THE AGENT def get_static_data(self):
+    def get_static_data(self):
+        return {
+            "system": get_summary_system(),
+            "users": get_summary_users(),
+            "cpu_core": get_cpu_cores(),
+        }
+
+    def get_dynamic_data(self):
+        return {
+            "cpu": get_summary_cpu(),
+            "ram": get_summary_ram(),
+            "processes": get_summary_processes(),
+            "network": get_summary_network(),
+            "disk": get_summary_disk(),
+        }
+
+    def get_full_data(self):
+        return {
+            **self.get_static_data(),
+            **self.get_dynamic_data(),
+        }
+
+    # LOOPS \ HERE WE HAVE THE MAIN LOOPS FOR THE COLLECT...
+
+    def get_dynamic_loop(self):
+        while True:
+            print("Dynamic data collect...")
+            ddata = self.get_dynamic_data()
+            self.dynamic_data = ddata
+            time.sleep(self.dynamic_collection_interval)
+
+    def get_static_loop(self):
+        while True:
+            print("Static data collect...")
+            sdata = self.get_static_data()
+            self.static_data = sdata
+            time.sleep(self.static_collection_interval)
+
+    # THREADS \ THIS THREADS CONTAIN THE MAIN TWO COLLECTS FOR THE AGENT , THE DYNAMIC AND STATIC COLLECT..
+
+    def run(self):
+
+        dynamic_thread = threading.Thread(target=self.get_dynamic_loop)
+
+        static_thread = threading.Thread(target=self.get_static_loop)
+
+        dynamic_thread.start()
+        static_thread.start()
+
+        dynamic_thread.join()
+        static_thread.join()
