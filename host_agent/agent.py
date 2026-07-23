@@ -1,26 +1,38 @@
-from .config import (
+from .config.settings import (
     HOST_AGENT_NAME,
     HOST_AGENT_VERSION,
+    HOST_AGENT_IP,
     COLLECTION_DYNAMIC_INTERVAL,
     COLLECTION_STATIC_INTERVAL,
     DEBUG,
     LOG_LEVEL,
+    SERVER_URL,
 )
 from .collectors import *
 import time
 import threading
+import requests
 
 
 class HostAgent:
     def __init__(self) -> None:
         self.version = HOST_AGENT_VERSION
         self.name = HOST_AGENT_NAME
+        self.ip = HOST_AGENT_IP
         self.dynamic_collection_interval = COLLECTION_DYNAMIC_INTERVAL
         self.static_collection_interval = COLLECTION_STATIC_INTERVAL
         self.debug = DEBUG
+        self.identity = {}
         self.dynamic_data = {}
         self.static_data = {}
         self.log_level = LOG_LEVEL
+
+    # IDENTITY FUNCTION \ WITH THIS FUNCTION WE WILL GET THE HOST ID AND CLOSE IT INTO THE SELF.IDENTITY ATRIBUTE
+
+    def get_identity(self):
+        print("POSTING IDENTITY TO THE SERVER ..")
+        id = {"agent": self.name, "version": self.version, "ip": self.ip}
+        self.identity = id
 
     # STATIC AND DYNAMIC COLLECT \ HERE WE CAN SEE THE STATIC AND DYNAMIC COLLECT OF THE AGENT def get_static_data(self):
     def get_static_data(self):
@@ -45,6 +57,12 @@ class HostAgent:
             **self.get_dynamic_data(),
         }
 
+    # REGISTER REQUEST \ WITH THIS REQUEST WE WILL TELL THE SERVER WHAT'S OUR IP
+
+    def register(self):
+        self.get_identity()
+        requests.post(f"{SERVER_URL}/agents/register", json=self.identity)
+
     # LOOPS \ HERE WE HAVE THE MAIN LOOPS FOR THE COLLECT...
 
     def get_dynamic_loop(self):
@@ -52,6 +70,7 @@ class HostAgent:
             print("Dynamic data collect...")
             ddata = self.get_dynamic_data()
             self.dynamic_data = ddata
+            requests.post(f"{SERVER_URL}/agents/dynamic", json=self.dynamic_data)
             time.sleep(self.dynamic_collection_interval)
 
     def get_static_loop(self):
@@ -59,11 +78,13 @@ class HostAgent:
             print("Static data collect...")
             sdata = self.get_static_data()
             self.static_data = sdata
+            requests.post(f"{SERVER_URL}/agents/static", json=self.static_data)
             time.sleep(self.static_collection_interval)
 
     # THREADS \ THIS THREADS CONTAIN THE MAIN TWO COLLECTS FOR THE AGENT , THE DYNAMIC AND STATIC COLLECT..
 
     def run(self):
+        self.register()
 
         dynamic_thread = threading.Thread(target=self.get_dynamic_loop)
 

@@ -11,3 +11,21 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    restart: unless-stopped
+    container_name: siem-server
+    ports:
+      - "8000:8000"
+    volumes:
+      - siem_data:/app/data
+
+volumes:
+  postgres_data:
+  siem_data:
+
+networks:
+  siem-network:
