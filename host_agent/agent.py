@@ -37,6 +37,7 @@ class HostAgent:
     # STATIC AND DYNAMIC COLLECT \ HERE WE CAN SEE THE STATIC AND DYNAMIC COLLECT OF THE AGENT def get_static_data(self):
     def get_static_data(self):
         return {
+            "ip": self.ip,
             "system": get_summary_system(),
             "users": get_summary_users(),
             "cpu_core": get_cpu_cores(),
@@ -44,6 +45,7 @@ class HostAgent:
 
     def get_dynamic_data(self):
         return {
+            "ip": self.ip,
             "cpu": get_summary_cpu(),
             "ram": get_summary_ram(),
             "processes": get_summary_processes(),
