@@ -7,7 +7,7 @@ class CPURuler:
         
 
         def check(self, ip, cpu):
-            findings = {}
+            findings = []
             current = cpu["frequency"]["current"]
             maximum = cpu["frequency"]["max"]
             usage = cpu["usage"]
