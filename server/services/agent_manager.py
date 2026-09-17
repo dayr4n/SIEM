@@ -150,13 +150,23 @@ class AgentManager:
             return agent.disk.get(field)
 
 
-#RUN FUNCTION FOR THE AGENT , HERE WE ARE TRIYING TO IMPLEMENT THO CORE ENGINE RULES TO SCAN AND FILTER THE DATA 
+#RUN FUNCTIONS
+
+
+
+#RUN FUNCTION TO SCAN A SPECIFIC AGENT , IT WILL BE CONVERTED AS A COMMAND OF THE SERVICE 
     def run(self, ip):
         agent = self.get_agent(ip)
 
         engine = CoreEngine()
         engine.cheking(ip, agent.cpu, agent.processes, agent.ram, agent.users )
 
+#RUN FUNCTION TO SCAN WITH THE RULERS ALL THE AGENTS , DOING A FOR IN THE IP
+    def runall(self):
+        engine = CoreEngine()
 
+        for ip in self.agents:
+            agent = self.get_agent(ip)
+            engine.cheking(ip, agent.cpu, agent.processes, agent.ram, agent.users)
 
 agent_manager = AgentManager()
