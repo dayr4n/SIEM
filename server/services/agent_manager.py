@@ -1,14 +1,25 @@
 from server.models.agent import Agent
-
+from server.core.engine import CoreEngine
 
 class AgentManager:
+
+    #Agent constructor , this only contains state info about the agents 
     def __init__(self):
         self.agents = {}
-
         self.total_agents = 0
         self.online_agents = 0
         self.registration_count = 0
 
+
+
+
+
+
+
+
+# API DEFINIIONS / THIS DEFINITIONS ARE THE ONLY ONE CHARGED ABOUT REGISTER AGENTS AND GET INFO ABOUT THE AGENTS 
+
+#FUNCTION TO REGISTER A NEW AGENT AS OBJECT Agent
     def register(self, data):
         ip = data["ip"]
         agent = data["agent"]
@@ -25,6 +36,9 @@ class AgentManager:
         else:
             return "The Agent already exists sorry you can't create it .."
 
+
+
+#FUNCTION USED TO STORE THE STATIC INFO INTO THE AGENT 
     def staticinfo(self, data):
         ip = data["ip"]
 
@@ -37,6 +51,8 @@ class AgentManager:
             agent.cpu_core = data["cpu_core"]
             print("STATIC INFO STORED ON THE SERVER AGENT ..")
 
+
+#FUNCTION USED TO STORE THE DYNAMIC INFO INTO THE AGENT 
     def dynamicinfo(self, data):
         ip = data["ip"]
 
@@ -51,6 +67,8 @@ class AgentManager:
             agent.disk = data["disk"]
             print("DYNAMIC INFO STORED ON THE SERVER AGENT ..")
 
+
+#FUNCTION USED TO RETURN ALL THE INFO OF THE AGENTS , USED FOR THE WEB DASHBOARD
     def list_agents(self):
         return {
             ip: {
@@ -67,8 +85,20 @@ class AgentManager:
             for ip, agent in self.agents.items()
         }
 
+
+
+
+
+
+
+
+
+#FUNCTIONS FOR UTILITIES 
+
+    #GET THE IP OF AN AGENT 
     def get_agent(self, ip):
         return self.agents.get(ip)
+
 
     # SYSTEM INFO
     def get_system(self, ip, field):
@@ -79,8 +109,8 @@ class AgentManager:
         else:
             return agent.system.get(field)
 
-    # USERS INFO \ INCOMPLETE THERE IS MORE INFORMATION LEFT
 
+    # USERS INFO \ INCOMPLETE THERE IS MORE INFORMATION LEFT
     def get_users(self, ip):
         agent = self.get_agent(ip)
 
@@ -89,8 +119,8 @@ class AgentManager:
         else:
             return agent.users
 
-    # CPU INFO
 
+    # CPU INFO
     def get_cpu(self, ip):
         agent = self.get_agent(ip)
 
@@ -98,6 +128,7 @@ class AgentManager:
             return None
         else:
             return agent.cpu
+
 
     # NETWORK INFO
     def get_network(self, ip, field):
@@ -108,8 +139,8 @@ class AgentManager:
         else:
             return agent.network.get(field)
 
-    # DISK INFO
 
+    # DISK INFO
     def get_disk(self, ip, field):
         agent = self.get_agent(ip)
 
@@ -117,6 +148,15 @@ class AgentManager:
             return None
         else:
             return agent.disk.get(field)
+
+
+#RUN FUNCTION FOR THE AGENT , HERE WE ARE TRIYING TO IMPLEMENT THO CORE ENGINE RULES TO SCAN AND FILTER THE DATA 
+    def run(self, ip):
+        agent = self.get_agent(ip)
+
+        engine = CoreEngine()
+        engine.cheking(ip, agent.cpu, agent.processes, agent.ram, agent.users )
+
 
 
 agent_manager = AgentManager()
