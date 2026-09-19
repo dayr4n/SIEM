@@ -1,8 +1,6 @@
 from server.core.finding import Finding
 
 class ProcessesRuler:
-    def __init__(self):
-        pass
 
     def find(self, ip, severity, title, description):
         return Finding(
@@ -31,6 +29,7 @@ class ProcessesRuler:
             }
         findings = []
         for p in processes :
+            #logic error here I have to take a look
             if "/tmp" or "/dev/shm" or "/var/tmp" in p["exe"] :
                 findings.append(
                     self.find(

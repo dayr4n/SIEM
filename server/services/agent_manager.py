@@ -1,6 +1,6 @@
 from server.models.agent import Agent
 from server.core.engine import CoreEngine
-
+import time
 class AgentManager:
 
     #Agent constructor , this only contains state info about the agents 
@@ -164,9 +164,9 @@ class AgentManager:
 #RUN FUNCTION TO SCAN WITH THE RULERS ALL THE AGENTS , DOING A FOR IN THE IP
     def runall(self):
         engine = CoreEngine()
-
-        for ip in self.agents:
-            agent = self.get_agent(ip)
-            engine.cheking(ip, agent.cpu, agent.processes, agent.ram, agent.users)
-
+        while True :
+            for ip in self.agents:
+                agent = self.get_agent(ip)
+                engine.cheking(ip, agent.cpu, agent.processes, agent.ram, agent.users)
+            time.sleep(4)
 agent_manager = AgentManager()
